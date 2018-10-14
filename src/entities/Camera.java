@@ -16,16 +16,16 @@ public class Camera {
 
     public void move(DisplayManager window){
         if(window.isKeyDown(GLFW.GLFW_KEY_W)){
-            position.z-=0.02f;
+            position.z-=0.1f;
         }
         if(window.isKeyDown(GLFW.GLFW_KEY_D)){
-            position.x+=0.02f;
+            position.x+=0.1f;
         }
         if(window.isKeyDown(GLFW.GLFW_KEY_A)){
-            position.x-=0.02f;
+            position.x-=0.1f;
         }
         if(window.isKeyDown(GLFW.GLFW_KEY_S)){
-            position.z+=0.02f;
+            position.z+=0.1f;
         }
     }
 
