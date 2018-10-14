@@ -6,11 +6,8 @@ import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
 import org.joml.Vector3f;
-import renderEngine.DisplayManager;
-import renderEngine.Loader;
+import renderEngine.*;
 import models.RawModel;
-import renderEngine.OBJLoader;
-import renderEngine.Renderer;
 import textures.ModelTexture;
 
 import java.io.IOException;
@@ -25,34 +22,33 @@ public class MainGameLoop {
         window.createDisplay();
 
         Loader loader = new Loader();
-        StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);
 
         RawModel model = OBJLoader.loadObjModel("dragon", loader);
 
         TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("res/brewster.png")));
+        ModelTexture texture = staticModel.getTexture();
+        texture.setShineDamper(10);
+        texture.setReflectivity(1);
 
-        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -25), 0, 0, 0, 1);
-        Light light = new Light(new Vector3f(0, 0, -20), new Vector3f(1, 1, 1));
+        Entity entity = new Entity(staticModel, new Vector3f(0, -5, -15), 0, 0, 0, 1);
+        Light light = new Light(new Vector3f(0, 0, -10), new Vector3f(1, 1, 1));
 
         Camera camera = new Camera();
 
+        MasterRenderer renderer = new MasterRenderer();
+
         while (!window.closed()) {
             if (window.isUpdating()) {
-                entity.increaseRotation(0, 1, 0);
+                entity.increaseRotation(0, 0.5f, 0);
                 camera.move(window);
-                renderer.prepare();
-                shader.start();
-                shader.loadLight(light);
-                shader.loadViewMatrix(camera);
-                renderer.render(entity, shader);
-                shader.stop();
+                renderer.processEntity(entity);
+                renderer.render(light, camera);
                 window.update();
                 window.swapBuffers();
             }
         }
+        renderer.cleanUp();
         loader.cleanUp();
-        shader.cleanUp();
         window.stop();
     }
 
