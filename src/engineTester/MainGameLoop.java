@@ -8,6 +8,7 @@ import models.TexturedModel;
 import org.joml.Vector3f;
 import renderEngine.*;
 import models.RawModel;
+import terrains.Terrain;
 import textures.ModelTexture;
 
 import java.io.IOException;
@@ -30,8 +31,11 @@ public class MainGameLoop {
         texture.setShineDamper(10);
         texture.setReflectivity(1);
 
-        Entity entity = new Entity(staticModel, new Vector3f(0, -5, -15), 0, 0, 0, 1);
-        Light light = new Light(new Vector3f(0, 0, -10), new Vector3f(1, 1, 1));
+        Entity entity = new Entity(staticModel, new Vector3f(0, 0, -15), 0, 0, 0, 1);
+        Light light = new Light(new Vector3f(2000, 2000, 2000), new Vector3f(1, 1, 1));
+
+        Terrain terrain = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("res/grass.png")));
+        Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("res/grass.png")));
 
         Camera camera = new Camera();
 
@@ -41,6 +45,10 @@ public class MainGameLoop {
             if (window.isUpdating()) {
                 entity.increaseRotation(0, 0.5f, 0);
                 camera.move(window);
+
+                renderer.processTerrain(terrain);
+                renderer.processTerrain(terrain2);
+
                 renderer.processEntity(entity);
                 renderer.render(light, camera);
                 window.update();
