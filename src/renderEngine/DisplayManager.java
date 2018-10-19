@@ -4,7 +4,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjglx.Sys;
 
 import java.nio.DoubleBuffer;
 
@@ -16,6 +15,9 @@ public class DisplayManager {
     private double fps_cap, time, processedTime = 0;
     private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
     private boolean[] mouseButtons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+
+
+    public float oldMouseX = -1, oldMouseY = -1, newMouseX = 0, newMouseY = 0;
 
     private static long lastFrameTime;
     private static float delta;
@@ -145,6 +147,21 @@ public class DisplayManager {
         return false;
     }
 
+    public float getDY(DisplayManager window) {
+        newMouseY = (float) window.getMouseY();
+        float dy = newMouseY - oldMouseY;
+        oldMouseY = newMouseY;
+        return dy;
+    }
+
+    public float getDX(DisplayManager window) {
+        newMouseX = (float) window.getMouseX();
+        float dx = newMouseX - oldMouseX;
+        oldMouseX = newMouseX;
+        return dx;
+
+    }
+
     public int getWidth() {
         return width;
     }
@@ -164,4 +181,7 @@ public class DisplayManager {
     public double getFPS() {
         return fps_cap;
     }
+
+
+
 }

@@ -60,8 +60,8 @@ public class MainGameLoop {
 
         Light light = new Light(new Vector3f(2000, 2000, 2000), new Vector3f(1, 1, 1));
 
-        Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
-        Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
+        Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightMap");
+        //Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightMap");
 
 
         List<Entity> entities = new ArrayList<Entity>();
@@ -72,7 +72,6 @@ public class MainGameLoop {
             entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() *800 - 400, 0, random.nextFloat() * -600), 0, 0,0, 2f));
         }
 
-        Camera camera = new Camera();
 
         MasterRenderer renderer = new MasterRenderer();
 
@@ -81,14 +80,16 @@ public class MainGameLoop {
 
         Player player = new Player(stanfordBunny, new Vector3f(0, 0, -50), 0, 0, 0, 1);
 
+        Camera camera = new Camera(player);
+
         while (!window.closed()) {
             if (window.isUpdating()) {
                 camera.move(window);
-                player.move(window);
+                player.move(window, terrain);
                 renderer.processEntity(player);
 
                 renderer.processTerrain(terrain);
-                renderer.processTerrain(terrain2);
+                //renderer.processTerrain(terrain2);
 
                 for(Entity entity:entities){
                     renderer.processEntity(entity);
